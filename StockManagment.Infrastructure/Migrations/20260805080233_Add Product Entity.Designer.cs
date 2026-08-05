@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockManagment.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using StockManagment.Infrastructure.Data;
 namespace StockManagment.Infrastructure.Migrations
 {
     [DbContext(typeof(StockManagmentDb))]
-    partial class StockManagmentDbModelSnapshot : ModelSnapshot
+    [Migration("20260805080233_Add Product Entity")]
+    partial class AddProductEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -119,83 +122,6 @@ namespace StockManagment.Infrastructure.Migrations
                         });
                 });
 
-            modelBuilder.Entity("StockManagment.Domain.Entity.StockItems", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("ProductsId1")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("UpdateDate")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("SYSUTCDATETIME()");
-
-                    b.Property<int>("WorkHouseId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("WorkHouseId1")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductsId1");
-
-                    b.HasIndex("WorkHouseId")
-                        .HasDatabaseName("IX_StockItems_WarehouseId");
-
-                    b.HasIndex("WorkHouseId1");
-
-                    b.HasIndex("ProductsId", "WorkHouseId")
-                        .IsUnique()
-                        .HasDatabaseName("UQ_StockItems_Product_Warehouse");
-
-                    b.ToTable("StockItems", (string)null);
-                });
-
-            modelBuilder.Entity("StockManagment.Domain.Entity.WorkHouse", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETUTCDATE()");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(200)
-                        .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<DateTime?>("UpdatedAt")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name")
-                        .IsUnique();
-
-                    b.ToTable("WorkHouses", (string)null);
-                });
-
             modelBuilder.Entity("StockManagment.Domain.Entity.Products", b =>
                 {
                     b.HasOne("StockManagment.Domain.Entity.Category", "Category")
@@ -205,43 +131,6 @@ namespace StockManagment.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
-                });
-
-            modelBuilder.Entity("StockManagment.Domain.Entity.StockItems", b =>
-                {
-                    b.HasOne("StockManagment.Domain.Entity.Products", "Products")
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StockManagment.Domain.Entity.Products", null)
-                        .WithMany("StockItems")
-                        .HasForeignKey("ProductsId1");
-
-                    b.HasOne("StockManagment.Domain.Entity.WorkHouse", "workHouse")
-                        .WithMany()
-                        .HasForeignKey("WorkHouseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("StockManagment.Domain.Entity.WorkHouse", null)
-                        .WithMany("StockItems")
-                        .HasForeignKey("WorkHouseId1");
-
-                    b.Navigation("Products");
-
-                    b.Navigation("workHouse");
-                });
-
-            modelBuilder.Entity("StockManagment.Domain.Entity.Products", b =>
-                {
-                    b.Navigation("StockItems");
-                });
-
-            modelBuilder.Entity("StockManagment.Domain.Entity.WorkHouse", b =>
-                {
-                    b.Navigation("StockItems");
                 });
 #pragma warning restore 612, 618
         }

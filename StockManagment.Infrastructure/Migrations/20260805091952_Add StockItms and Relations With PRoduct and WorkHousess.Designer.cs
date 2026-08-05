@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockManagment.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using StockManagment.Infrastructure.Data;
 namespace StockManagment.Infrastructure.Migrations
 {
     [DbContext(typeof(StockManagmentDb))]
-    partial class StockManagmentDbModelSnapshot : ModelSnapshot
+    [Migration("20260805091952_Add StockItms and Relations With PRoduct and WorkHousess")]
+    partial class AddStockItmsandRelationsWithPRoductandWorkHousess
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

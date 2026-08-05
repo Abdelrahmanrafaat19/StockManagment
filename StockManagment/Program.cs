@@ -24,7 +24,7 @@ namespace StockManagment
 
             app.UseAuthorization();
 
-            Console.WriteLine("Hello Worled");
+            
             app.MapControllers();
 
             app.Run();

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StockManagment.Infrastructure.Data;
 
@@ -11,9 +12,11 @@ using StockManagment.Infrastructure.Data;
 namespace StockManagment.Infrastructure.Migrations
 {
     [DbContext(typeof(StockManagmentDb))]
-    partial class StockManagmentDbModelSnapshot : ModelSnapshot
+    [Migration("20260805091604_Add StockItms and Relations With PRoduct and WorkHouses")]
+    partial class AddStockItmsandRelationsWithPRoductandWorkHouses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -130,9 +133,6 @@ namespace StockManagment.Infrastructure.Migrations
                     b.Property<int>("ProductsId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductsId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("UpdateDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -141,17 +141,10 @@ namespace StockManagment.Infrastructure.Migrations
                     b.Property<int>("WorkHouseId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WorkHouseId1")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductsId1");
 
                     b.HasIndex("WorkHouseId")
                         .HasDatabaseName("IX_StockItems_WarehouseId");
-
-                    b.HasIndex("WorkHouseId1");
 
                     b.HasIndex("ProductsId", "WorkHouseId")
                         .IsUnique()
@@ -176,9 +169,6 @@ namespace StockManagment.Infrastructure.Migrations
                     b.Property<string>("Description")
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -215,33 +205,15 @@ namespace StockManagment.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StockManagment.Domain.Entity.Products", null)
-                        .WithMany("StockItems")
-                        .HasForeignKey("ProductsId1");
-
                     b.HasOne("StockManagment.Domain.Entity.WorkHouse", "workHouse")
                         .WithMany()
                         .HasForeignKey("WorkHouseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("StockManagment.Domain.Entity.WorkHouse", null)
-                        .WithMany("StockItems")
-                        .HasForeignKey("WorkHouseId1");
-
                     b.Navigation("Products");
 
                     b.Navigation("workHouse");
-                });
-
-            modelBuilder.Entity("StockManagment.Domain.Entity.Products", b =>
-                {
-                    b.Navigation("StockItems");
-                });
-
-            modelBuilder.Entity("StockManagment.Domain.Entity.WorkHouse", b =>
-                {
-                    b.Navigation("StockItems");
                 });
 #pragma warning restore 612, 618
         }
