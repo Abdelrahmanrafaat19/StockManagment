@@ -1,5 +1,7 @@
-﻿using StockManagment.Domain.Entity;
+﻿
 
+
+using StockManagment.Domain.Entity;
 
 namespace StockManagment.Domain.Contracts
 {
@@ -7,6 +9,6 @@ namespace StockManagment.Domain.Contracts
     {
         Task<int> SaveChangesAsync(CancellationToken ct = default);
 
-        IGenaricRepo<TKey, TEntity> GetRepositor<TEntity, TKey>() where TEntity : BaseEntity<TKey>;
+        IGenaricRepo<TKey, TEntity> GetRepositor< TKey, TEntity>() where TEntity : BaseEntity<TKey>;
     }
 }

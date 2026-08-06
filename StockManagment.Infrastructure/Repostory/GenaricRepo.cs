@@ -2,13 +2,14 @@
 using StockManagment.Domain.Contracts;
 using StockManagment.Domain.Entity;
 using StockManagment.Infrastructure.Data;
+using System.Linq.Expressions;
 namespace StockManagment.Infrastructure.Repostory
 {
-    public class GenaricRepo<Tkey , TEntity>(StockManagmentDb context) : IGenaricRepo<Tkey , TEntity> where TEntity : BaseEntity<Tkey>
+    public class GenaricRepo<Tkey, TEntity>(StockManagmentDb context) : IGenaricRepo<Tkey, TEntity> where TEntity : BaseEntity<Tkey>
     {
-        public void AddAsync(TEntity entity, CancellationToken Ct)
+        public async Task AddAsync(TEntity entity, CancellationToken Ct)
         {
-            context.Set<TEntity>().AddAsync(entity, Ct);
+            await context.Set<TEntity>().AddAsync(entity, Ct);
         }
 
         //public Task<int> CountOfItemAsync(ISpecification<TEntity, Tkey> specifications, CancellationToken Ct)
@@ -26,9 +27,14 @@ namespace StockManagment.Infrastructure.Repostory
             return await context.Set<TEntity>().AsNoTracking().ToListAsync(Ct);
         }
 
-        public Task<TEntity> GetById(Tkey id, CancellationToken Ct)
+        public async Task<TEntity> GetById(Tkey id, CancellationToken Ct)
         {
-            throw new NotImplementedException();
+            return await context.Set<TEntity>().FindAsync(id,Ct);
+        }
+
+        public async Task<TEntity> GetByName(Expression<Func<TEntity, bool>> name, CancellationToken Ct)
+        {
+            return await context.Set<TEntity>().FirstOrDefaultAsync(name);
         }
 
         public void UpdateAsync(TEntity entity, CancellationToken Ct)

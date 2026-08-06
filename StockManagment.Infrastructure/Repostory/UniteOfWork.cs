@@ -12,7 +12,7 @@ namespace StockManagment.Infrastructure.Repostory
     public class UniteOfWork(StockManagmentDb context) : IUniteOfWork
     {
         private readonly Dictionary<string, object> _Repos = [];
-        public IGenaricRepo<TKey, TEntity> GetRepositor<TEntity, TKey>() where TEntity : BaseEntity<TKey>
+        public IGenaricRepo<TKey, TEntity> GetRepositor<TKey, TEntity>() where TEntity : BaseEntity<TKey>
         {
             var typeName = typeof(TEntity).Name;
             if (_Repos.TryGetValue(typeName, out object OldRepos))
