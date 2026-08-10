@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using StockManagment.Application.common;
 using StockManagment.Application.contract;
-using StockManagment.Application.Dtos;
+using StockManagment.Application.Dtos.CatogryDtos;
 using StockManagment.Domain.Contracts;
 using StockManagment.Domain.Entity;
 

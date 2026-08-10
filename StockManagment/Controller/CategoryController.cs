@@ -1,8 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using StockManagment.Application.common;
+﻿using Microsoft.AspNetCore.Mvc;
 using StockManagment.Application.contract;
-using StockManagment.Application.Dtos;
+using StockManagment.Application.Dtos.CatogryDtos;
 
 namespace StockManagment.Api.Controller
 {

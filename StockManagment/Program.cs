@@ -1,4 +1,5 @@
 
+using StockManagment.Application;
 using StockManagment.Application.contract;
 using StockManagment.Application.Services;
 using StockManagment.Infrastructure;
@@ -11,10 +12,10 @@ namespace StockManagment
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddInfrastructureServices(builder.Configuration);
+            builder.Services.AddApplicationServices();
             builder.Services.AddControllers();
        
             builder.Services.AddOpenApi();
-            builder.Services.AddScoped<ICategoryService, CategoryService>();
            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -32,8 +33,9 @@ namespace StockManagment
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+            app.UseStaticFiles();
 
-            
+
             app.MapControllers();
 
             app.Run();

@@ -1,6 +1,6 @@
 ﻿
 using StockManagment.Application.common;
-using StockManagment.Application.Dtos;
+using StockManagment.Application.Dtos.CatogryDtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
