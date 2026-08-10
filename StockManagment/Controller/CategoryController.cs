@@ -29,6 +29,17 @@ namespace StockManagment.Api.Controller
             var result = await categoryService.GetCategoryByIdAsync(id, ct);
             return HandleResult(result);
         }
-
+        [HttpGet("GetAllCategories")]
+        public async Task<IActionResult> GetAllGategory(CancellationToken ct = default)
+        {
+            var result = await categoryService.GetAllCategoriesAsync(ct);
+            return HandleResult(result);
+        }
+        [HttpPut("UpdateCategoryById/{id}")]
+        public async Task<IActionResult> UpdateCategoryById(int id, CreateCategoryDto createCategoryDto, CancellationToken ct = default)
+        {
+            var result = await categoryService.UpdateCategoryByIdAsync(id, createCategoryDto, ct);
+            return HandleResult(result);
+        }
     }
 }

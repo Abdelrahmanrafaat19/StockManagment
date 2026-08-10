@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Options;
 using StockManagment.Application.common;
 using StockManagment.Application.contract;
 using StockManagment.Application.Dtos;
@@ -60,6 +61,20 @@ namespace StockManagment.Application.Services
             }
         }
 
+        public async Task<Result<IReadOnlyList<CategoryDto>>> GetAllCategoriesAsync(CancellationToken ct = default)
+        {
+            var result= await uniteOfWork.GetRepositor<int , Category>().GetAllAsync(ct);
+            var theEndResult = result.Select(category => new CategoryDto()
+            {
+                Id = category.Id,
+                Name = category.Name,
+                Description = category.Description,
+                CreatedAt = category.CreatedAt,
+                UpdatedAt = category.UpdatedAt
+            }).ToList();
+            return Result<IReadOnlyList<CategoryDto>>.Success(theEndResult);
+        }
+
         public async Task<Result<CategoryDto>> GetCategoryByIdAsync(int id, CancellationToken ct = default)
         {
             var result =await uniteOfWork.GetRepositor<int, Category>().GetById(id, ct);
@@ -78,6 +93,31 @@ namespace StockManagment.Application.Services
                 Description = result.Description,
                 CreatedAt = result.CreatedAt,
                 UpdatedAt = result.UpdatedAt
+            });
+        }
+
+        public async Task<Result<CategoryDto>> UpdateCategoryByIdAsync(int id, CreateCategoryDto createCategoryDto, CancellationToken ct = default)
+        {
+            var CategoryResult=await uniteOfWork.GetRepositor<int, Category>().GetById(id, ct);
+            if(CategoryResult is null)
+            {
+                return Result<CategoryDto>.Failure(
+                              Error.NotFound(
+                                  "Categories.NotFound",
+                                  "Category not found."));
+            }
+            // Update the category properties here
+            CategoryResult.Name = createCategoryDto.Name;
+            CategoryResult.Description = createCategoryDto.Description;
+            CategoryResult.UpdatedAt = DateTime.UtcNow;
+            await uniteOfWork.SaveChangesAsync(ct);
+            return Result<CategoryDto>.Success(new CategoryDto()
+            {
+                Id = CategoryResult.Id,
+                Name = CategoryResult.Name,
+                Description = CategoryResult.Description,
+                CreatedAt = CategoryResult.CreatedAt,
+                UpdatedAt = CategoryResult.UpdatedAt
             });
         }
     }

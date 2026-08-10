@@ -13,5 +13,7 @@ namespace StockManagment.Application.contract
     {
         Task<Result<CategoryDto>> CreateCategoryAsync(CreateCategoryDto createCategoryDto , CancellationToken ct=default);
         Task<Result<CategoryDto>> GetCategoryByIdAsync(int id , CancellationToken ct=default);
+        Task<Result<CategoryDto>> UpdateCategoryByIdAsync(int id ,CreateCategoryDto createCategoryDto, CancellationToken ct=default);
+        Task<Result<IReadOnlyList<CategoryDto>>> GetAllCategoriesAsync(CancellationToken ct=default);
     }
 }
