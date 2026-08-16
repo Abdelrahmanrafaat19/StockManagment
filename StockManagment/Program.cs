@@ -3,6 +3,7 @@ using StockManagment.Application;
 using StockManagment.Application.contract;
 using StockManagment.Application.Services;
 using StockManagment.Infrastructure;
+using StockManagment.Infrastructure.IdentityData;
 
 namespace StockManagment
 {
@@ -14,7 +15,8 @@ namespace StockManagment
             builder.Services.AddInfrastructureServices(builder.Configuration);
             builder.Services.AddApplicationServices();
             builder.Services.AddControllers();
-       
+            builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
             builder.Services.AddOpenApi();
            
             builder.Services.AddEndpointsApiExplorer();
