@@ -22,5 +22,12 @@ namespace StockManagment.Api.Controller
             var result = await _authenticationService.CreateUser(dto);
             return HandleResult(result);
         }
+
+        [HttpPost("Login")]
+        public async Task<IActionResult> SignIn([FromBody] SignInDto dto)
+        {
+            var result = await _authenticationService.LoginUser(dto);
+            return HandleResult(result);
+        }
     }
 }

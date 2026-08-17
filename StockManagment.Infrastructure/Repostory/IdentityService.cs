@@ -43,6 +43,36 @@ namespace StockManagment.Infrastructure.Repostory
                 roles.ToList());
         }
 
+        public async Task<Result<SignInReturnedDto>> SignInAsync(SignInDto dto, CancellationToken cancellationToken)
+        {
+            var result =  await _user.FindByEmailAsync(dto.Email);
+
+            if (result is null)
+            {
+                return Result<SignInReturnedDto>.Failure(Error.Unauthorized("ErrorType.Unauthorized", "Email is not Exist"));
+            }
+
+
+            var checkPassword = await _user.CheckPasswordAsync(result, dto.Password);
+
+            if (!checkPassword)
+            {
+                return Result<SignInReturnedDto>.Failure(Error.Unauthorized("ErrorType.Unauthorized", "Password is not correc"));
+            }
+
+
+            return Result<SignInReturnedDto>.Success(new SignInReturnedDto()
+            {
+                Id = result.Id,
+                DisplayName = result.DisplayName,
+                UserName= result.UserName!,
+                Email=  result.Email!,
+                PhoneNumber= result.PhoneNumber!
+
+            });
+            
+        }
+
         public async Task<Result<SignUpCreatedDto>> SignUpAsync(SignUpDtos dto, CancellationToken cancellationToken)
         {
             var resultCheckEmailExist = await _user.FindByEmailAsync(dto.Email);

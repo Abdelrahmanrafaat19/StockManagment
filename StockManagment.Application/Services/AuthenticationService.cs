@@ -1,11 +1,7 @@
 ﻿using StockManagment.Application.common;
 using StockManagment.Application.contract;
 using StockManagment.Application.Dtos.IDentityDTOS;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace StockManagment.Application.Services
 {
@@ -13,6 +9,7 @@ namespace StockManagment.Application.Services
     {
         private readonly IIdentityService _identityService;
         private readonly IJwtTokenCreator _jwtTokenCreator;
+      
         public AuthenticationService(IIdentityService identityService , IJwtTokenCreator jwtTokenCreator)
         {
             _identityService = identityService;
@@ -38,6 +35,29 @@ namespace StockManagment.Application.Services
                Token = token
            });
 
+        }
+
+        public async Task<Result<PresentationLoginDto>> LoginUser(SignInDto dto, CancellationToken cancellationToken = default)
+        {
+            var result =await _identityService.SignInAsync(dto, cancellationToken);
+            if (!result.IsSuccess)
+            {
+                return Result<PresentationLoginDto>.Failure(result.Error);
+            }
+
+            var role = await _identityService.GetUserRolesByEmailAsync(dto.Email);
+
+            var token = _jwtTokenCreator.CreateToken(result.Value.Email, result.Value.UserName, result.Value.Id, Array.Empty<string>(), cancellationToken);
+            
+            return Result<PresentationLoginDto>.Success(new PresentationLoginDto
+            {
+                Id = result.Value.Id,
+                Email= result.Value.Email,
+                PhoneNumber= result.Value.PhoneNumber,
+                DisplayName= result.Value.DisplayName,
+                UserName = result.Value.UserName,
+                Token = token
+            });
         }
     }
 }

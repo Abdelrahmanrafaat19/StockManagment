@@ -12,5 +12,6 @@ namespace StockManagment.Application.contract
     {
         Task<Result<SignUpCreatedDto>> SignUpAsync(SignUpDtos dto , CancellationToken cancellationToken);
         Task<Result<IReadOnlyList<string>>> GetUserRolesByEmailAsync(string email);
+        Task<Result<SignInReturnedDto>> SignInAsync(SignInDto dto, CancellationToken cancellationToken);
     }
 }
