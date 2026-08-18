@@ -1,8 +1,10 @@
 ﻿
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StockManagment.Application.contract;
 using StockManagment.Application.Dtos.IDentityDTOS;
+using System.Security.Claims;
 
 namespace StockManagment.Api.Controller
 {
@@ -27,6 +29,21 @@ namespace StockManagment.Api.Controller
         public async Task<IActionResult> SignIn([FromBody] SignInDto dto)
         {
             var result = await _authenticationService.LoginUser(dto);
+            return HandleResult(result);
+        }
+        [HttpPost("CreateRole")]
+        public async Task<IActionResult> CreateRole([FromBody] string rolename)
+        {
+            var result = await _authenticationService.CreateRole(rolename);
+            return HandleResult(result);
+        }
+        [Authorize]
+        [HttpGet("GetCurrentUser")]
+       
+        public async Task<IActionResult> GetCurrentUser()
+        {
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            var result = await _authenticationService.GetCurrentUser(email!);
             return HandleResult(result);
         }
     }

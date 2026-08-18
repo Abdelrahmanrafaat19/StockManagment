@@ -13,5 +13,7 @@ namespace StockManagment.Application.contract
     {
         Task<Result<PresentationUserCreatedDtos>> CreateUser(SignUpDtos dto, CancellationToken cancellationToken = default!);
         Task<Result<PresentationLoginDto>> LoginUser(SignInDto dto, CancellationToken cancellationToken = default!);
+        Task<Result<RoleDto>> CreateRole(string name, CancellationToken cancelationToken = default!);
+        Task<Result<ProfileDto>> GetCurrentUser(string email, CancellationToken cancellationToken = default!);
     }
 }

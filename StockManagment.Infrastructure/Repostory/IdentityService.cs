@@ -10,10 +10,58 @@ namespace StockManagment.Infrastructure.Repostory
     public class IdentityService : IIdentityService
     {
         private readonly UserManager<ApplictionUser> _user;
+        private readonly RoleManager<IdentityRole> _role;
 
-        public IdentityService(UserManager<ApplictionUser> User)
+        public IdentityService(UserManager<ApplictionUser> User , RoleManager<IdentityRole> Roles)
         {
             _user = User;
+            _role = Roles;
+        }
+
+        public async Task<Result<RoleDto>> CreateRole(string name, CancellationToken cancelationToken = default) 
+        {
+            var role = await _role.RoleExistsAsync(name.ToLower());
+            if (role)
+            {
+                return Result<RoleDto>.Failure(Error.Conflict("ErrorType.Conflict", "This Role is Already Exist"));
+            }
+
+            var newRole = new IdentityRole(name.ToLower());
+            var result = await _role.CreateAsync(newRole);
+            if (!result.Succeeded)
+            {
+                return Result<RoleDto>.Failure(Error.Failure("ErrorType.Failure", "Failed to create role."));
+            }
+
+            return Result<RoleDto>.Success(new RoleDto
+            {
+                RoleId = newRole.Id,
+                RoleName = newRole.Name
+            });
+        }
+
+        public async Task<Result<ProfileDto>> GetCurrentUser(string email, CancellationToken cancellationToken = default)
+        {
+           if(email is null)
+           {
+                return Result<ProfileDto>.Failure(Error.Unauthorized("ErrorType.Unauthorized", "Email is required."));
+           }
+
+            var userByEmail = await _user.FindByEmailAsync(email);
+
+            if(userByEmail is null)
+            {
+                return Result<ProfileDto>.Failure(Error.NotFound("ErrorType.NotFound", "This user does not exist."));
+            }
+
+            return Result<ProfileDto>.Success(new ProfileDto
+            {
+                ID = userByEmail.Id,
+                DisplayName = userByEmail.DisplayName,
+                UserName = userByEmail.UserName!,
+                Email = userByEmail.Email!,
+                PhoneNumber = userByEmail.PhoneNumber!
+            });
         }
 
         public async Task<Result<IReadOnlyList<string>>> GetUserRolesByEmailAsync(string email)

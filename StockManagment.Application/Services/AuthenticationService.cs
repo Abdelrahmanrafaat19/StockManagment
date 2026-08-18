@@ -15,6 +15,18 @@ namespace StockManagment.Application.Services
             _identityService = identityService;
             _jwtTokenCreator = jwtTokenCreator;
         }
+
+        public async Task<Result<RoleDto>> CreateRole(string name, CancellationToken cancelationToken = default)
+        {
+            var result = await _identityService.CreateRole(name, cancelationToken);
+            if (!result.IsSuccess)
+            {
+                return Result<RoleDto>.Failure(result.Error);
+            }
+
+            return Result<RoleDto>.Success(result.Value);
+        }
+
         public async Task<Result<PresentationUserCreatedDtos>> CreateUser(SignUpDtos dto, CancellationToken cancellationToken =default!)
         {
             var result =await _identityService.SignUpAsync(dto, cancellationToken);
@@ -34,6 +46,18 @@ namespace StockManagment.Application.Services
                UserName = result.Value.UserName,
                Token = token
            });
+
+        }
+
+        public async Task<Result<ProfileDto>> GetCurrentUser(string email, CancellationToken cancellationToken = default)
+        {
+            var result = await _identityService.GetCurrentUser(email, cancellationToken);
+            if (!result.IsSuccess) 
+            {
+                return Result<ProfileDto>.Failure(result.Error);
+            }
+
+            return Result<ProfileDto>.Success(result.Value);
 
         }
 
