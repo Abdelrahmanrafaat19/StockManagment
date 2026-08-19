@@ -17,7 +17,7 @@ namespace StockManagment.Api.Controller
                 return HandleFailure(result.Error);
             }
 
-            return Ok(result.Value);
+            return Ok(result);
         }
 
 
